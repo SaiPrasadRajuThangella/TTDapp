@@ -1,30 +1,38 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, ScrollView } from 'react-native';
+import  { useContext } from "react";
 
+import { UserContext } from '../navigation/AuthStack';
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  
-  const handleLogin =  () => {
-    navigation.navigate('Home');
-    // try {
-    //   const response = await fetch('http://localhost:7070/login', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ username, password }),
-    //   });
-
-    //   const data = await response.json();
-
-    //   if (response.status === 200) {
-    //   } else {
-    //     Alert.alert('Login Failed', data.message || 'Invalid credentials');
-    //   }
-    // } catch (error) {
-    //   Alert.alert('Error', 'There was an issue connecting to the server.');
-    // }
+  const {user,setUser,token,setToken} = useContext(UserContext);
+  const handleLogin =  async () => {
+    // console.log(username,password)
+    try {
+      const response = await fetch('http://192.168.0.125:7070/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ "email": username, "password": password }),
+      });
+      
+      const data = await response.json();
+      // console.log(data)
+      setToken(data.token)
+      setUser(data)
+      
+      if (response.status === 200) {
+        navigation.navigate('Home');
+      } else {
+        Alert.alert('Login Failed', data.message || 'Invalid credentials');
+      }
+    } catch (error) {
+            // console.log(error)
+            Alert("Something went Wrong")
+      ;
+    }
   };
 
   return (

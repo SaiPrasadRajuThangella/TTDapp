@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { UserContext } from '../navigation/AuthStack';
 
 export default function HomeScreen({ navigation }) {
-  const user = 'User'; // Replace with the actual username from your login state
-
+  // const user = 'User'; // Replace with the actual username from your login state
+  const {user} = useContext(UserContext)
+console.log(user)
+  const holder = user.fullName
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Welcome {user}!</Text>
+        <Text style={styles.headerText}>Welcome {holder}!</Text>
       </View>
       
       <TouchableOpacity style={styles.feedbackButton} onPress={() => navigation.navigate('Feedback')}>
