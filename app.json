@@ -17,10 +17,13 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO"
+        // "android.permission.CAMERA",
+        // "android.permission.RECORD_AUDIO",
+        "CAMERA",
+        "RECORD_AUDIO",
+        
       ],
-      "package": "com.saiprasadraju678.TTDApp"
+      // "package": "com.saiprasadraju678.TTDApp"
     },
     "web": {
       "bundler": "metro",

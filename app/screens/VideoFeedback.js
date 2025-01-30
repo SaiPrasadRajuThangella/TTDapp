@@ -85,8 +85,8 @@ export default function VideoFeedbackScreen1() {
         // Navigate to VideoSubmitScreen with the recorded video
         navigation.navigate('VideoSubmitScreen', { videoUri: data.uri });
       } catch (error) {
-        console.error('Failed to record video:', error);
-        alert('Error recording video: ' + error.message);
+        console.error('Failed to record video:', error.message);
+        alert('Error recording video: ' + error);
       }
     }
   };
