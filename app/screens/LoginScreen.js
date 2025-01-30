@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, ScrollView } from 'react-native';
 import  { useContext } from "react";
 
-import { UserContext } from '../navigation/AuthStack';
+// import { UserContext } from '../navigation/AuthStack';
+import { UserContext } from '../AuthStack';
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

@@ -5,9 +5,9 @@ export default function FeedbackScreen({ navigation }) {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  const handleNavigation = (category) => {
+  const handleNavigation = (category, id) => {
     if (name && phoneNumber) {
-      navigation.navigate(category, { name, phoneNumber });
+      navigation.navigate(category, { name, phoneNumber, id });
     } else {
       alert('Please enter both your name and phone number.');
     }
@@ -33,16 +33,28 @@ export default function FeedbackScreen({ navigation }) {
         keyboardType="phone-pad"
       />
 
-      <TouchableOpacity style={styles.option} onPress={() => handleNavigation('Prasadam')}>
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() => handleNavigation('Prasadam', 1)}  // Example id for Prasadam
+      >
         <Text style={styles.optionText}>Prasadam</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.option} onPress={() => handleNavigation('OnlineTicketing')}>
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() => handleNavigation('OnlineTicketing', 3)}  // Example id for Online Ticketing
+      >
         <Text style={styles.optionText}>Online Ticketing</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.option} onPress={() => handleNavigation('Rooms')}>
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() => handleNavigation('Rooms', 2)}  // Example id for Rooms
+      >
         <Text style={styles.optionText}>Rooms</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.option} onPress={() => handleNavigation('QueLine')}>
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() => handleNavigation('QueLine', 4)}  // Example id for Que Line
+      >
         <Text style={styles.optionText}>Que Line</Text>
       </TouchableOpacity>
     </View>

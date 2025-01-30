@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { UserContext } from '../navigation/AuthStack';
+// import { UserContext } from '../navigation/AuthStack';
+import { UserContext } from '../AuthStack';
 
 export default function HomeScreen({ navigation }) {
   // const user = 'User'; // Replace with the actual username from your login state

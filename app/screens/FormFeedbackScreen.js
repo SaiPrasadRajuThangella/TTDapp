@@ -9,30 +9,35 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { UserContext } from "../navigation/AuthStack";
+// import { UserContext } from "../navigation/AuthStack";
+import { UserContext } from "../AuthStack";
+import { RadioButton } from 'react-native-paper'; // Import RadioButton component
 
-export default function FormFeedbackScreen({ navigation }) {
-  const [name, setName] = useState("");
-  const [mobile, setMobile] = useState("");
+export default function FormFeedbackScreen({ navigation,route }) {
+  // const [name, setName] = useState("");
+  // const [mobile, setMobile] = useState("");
   const [feedback, setFeedback] = useState("");
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { token } = useContext(UserContext);
 
+  const { id,name,phoneNumber} = route.params;
+
   // Handle form submission
+  console.log(id,name,phoneNumber)
   const handleSubmit = () => {
-    if (name && mobile && feedback) {
+    if (Object.keys(answers).length === questions.length) {
       setIsModalVisible(true);
     } else {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert("Error", "Please fill in all fields and answer all questions");
     }
   };
 
   // Close the modal
   const closeModal = () => {
     setIsModalVisible(false);
-    navigation.goBack();
+    navigation.navigate("Home");
   };
 
   // Handle question answer selection
@@ -48,7 +53,7 @@ export default function FormFeedbackScreen({ navigation }) {
 
     async function getQuestions() {
       try {
-        const response = await fetch("http://192.168.0.125:7070/questions/1", {
+        const response = await fetch(`http://192.168.0.125:7070/questions/${id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -57,7 +62,7 @@ export default function FormFeedbackScreen({ navigation }) {
         });
 
         const text = await response.text();
-        console.log("Raw API Response:", text);
+        // console.log("Raw API Response:", text);
 
         try {
           const data = JSON.parse(text);
@@ -84,32 +89,6 @@ export default function FormFeedbackScreen({ navigation }) {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Feedback Form</Text>
 
-      {/* Name Field */}
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Enter your name"
-        value={name}
-        onChangeText={setName}
-      />
-
-      {/* Mobile Number Field */}
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Enter your mobile number"
-        value={mobile}
-        onChangeText={setMobile}
-        keyboardType="phone-pad"
-      // /> */} 
-
-      {/* Feedback Text Field */}
-      <TextInput
-        style={[styles.input, { height: 100 }]}
-        placeholder="Enter your feedback"
-        value={feedback}
-        onChangeText={setFeedback}
-        multiline
-      />
-
       {/* Questions List */}
       <View style={styles.questionsContainer}>
         <Text style={styles.subTitle}>Questions:</Text>
@@ -117,18 +96,21 @@ export default function FormFeedbackScreen({ navigation }) {
           <View key={question.id} style={styles.questionContainer}>
             <Text style={styles.questionText}>{question.questionText}</Text>
             <View style={styles.answerContainer}>
-              <TouchableOpacity
-                style={styles.answerButton}
-                onPress={() => handleAnswerSelect(question.id, "Yes")}
+              <RadioButton.Group
+                onValueChange={(value) => handleAnswerSelect(question.id, value)}
+                value={answers[question.id]}
               >
-                <Text style={styles.buttonText}>Yes</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.answerButton}
-                onPress={() => handleAnswerSelect(question.id, "No")}
-              >
-                <Text style={styles.buttonText}>No</Text>
-              </TouchableOpacity>
+                <View style={styles.radioButtonContainer}>
+                  <View style={styles.radioButtonOption}>
+                    <RadioButton value="Yes" />
+                    <Text style={styles.radioButtonText}>Yes</Text>
+                  </View>
+                  <View style={styles.radioButtonOption}>
+                    <RadioButton value="No" />
+                    <Text style={styles.radioButtonText}>No</Text>
+                  </View>
+                </View>
+              </RadioButton.Group>
             </View>
             <Text style={styles.selectedAnswer}>
               {answers[question.id] ? `Selected: ${answers[question.id]}` : ""}
@@ -244,18 +226,25 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   answerContainer: {
-    flexDirection: "row",
     marginTop: 10,
   },
-  answerButton: {
-    padding: 8,
-    marginRight: 8,
-    backgroundColor: "#007bff",
-    borderRadius: 5,
+  radioButtonContainer: {
+    flexDirection: "row",
+    // justifyContent: "flex-start",
+    gap:20
+  },
+  radioButtonOption: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  radioButtonText: {
+    marginLeft: 5,
+    fontSize: 16,
+    color: "#333",
   },
   selectedAnswer: {
     marginTop: 5,
-    color: "#555",
+    color: "#333",
     fontSize: 14,
   },
 });

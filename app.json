@@ -15,7 +15,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.saiprasadraju678.TTDApp"
     },
     "web": {
       "bundler": "metro",
@@ -31,7 +36,6 @@
           "recordAudioAndroid": true
         }
       ],
-
       "expo-router",
       [
         "expo-splash-screen",
@@ -45,6 +49,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "3cf4e6c6-c5c0-4144-9b0e-5b1d9bd12333"
+      }
     }
   }
 }

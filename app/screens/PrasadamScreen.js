@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
-export default function PrasadamScreen({ navigation }) {
+export default function PrasadamScreen({ route, navigation }) {
+  const { id, name, phoneNumber } = route.params;
+
   const handleVideoFeedback = () => {
-    navigation.navigate('VideoFeedback');
+    navigation.navigate('VideoFeedback',{ id, name, phoneNumber });
   };
   
   const handleFormFeedback = () => {
     // Navigate to form feedback screen if required
-    navigation.navigate('FormFeedback');
+    navigation.navigate('FormFeedback',{ id, name, phoneNumber });
     // Alert.alert("Form Feedback is under development.");
   };
 

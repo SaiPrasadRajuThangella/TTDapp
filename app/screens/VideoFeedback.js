@@ -10,6 +10,7 @@ export default function VideoFeedbackScreen1() {
   const [audioPermission, setAudioPermission] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [videoUri, setVideoUri] = useState(null);
+  const [recordingTime, setRecordingTime] = useState(0); // Timer state
   const cameraRef = useRef(null);
   const navigation = useNavigation();
 
@@ -19,6 +20,18 @@ export default function VideoFeedbackScreen1() {
       setAudioPermission(status === 'granted');
     })();
   }, []);
+
+  useEffect(() => {
+    let timer;
+    if (isRecording) {
+      timer = setInterval(() => {
+        setRecordingTime((prev) => prev + 1); // Increment timer every second
+      }, 1000);
+    } else {
+      clearInterval(timer);
+    }
+    return () => clearInterval(timer); // Cleanup the timer when the component unmounts
+  }, [isRecording]);
 
   if (!permission || !audioPermission) {
     return (
@@ -53,6 +66,7 @@ export default function VideoFeedbackScreen1() {
       try {
         setIsRecording(true);
         setVideoUri(null);
+        setRecordingTime(0); // Reset timer when starting a new recording
         const videoRecordPromise = cameraRef.current.recordAsync({
           maxDuration: 30,
           quality: '720p',
@@ -87,19 +101,27 @@ export default function VideoFeedbackScreen1() {
   return (
     <View style={styles.container}>
       <CameraView style={styles.camera} facing={facing} ref={cameraRef} audio={true} mode="video">
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.button, isRecording && styles.recordingButton]}
-            onPress={isRecording ? stopRecording : startRecording}
-          >
-            <Text style={styles.text}>{isRecording ? 'Stop Recording' : 'Record Video'}</Text>
-          </TouchableOpacity>
+        {/* Timer at the top */}
+        <View style={styles.timerContainer}>
+          <Text style={styles.timerText}>{recordingTime}s</Text>
         </View>
       </CameraView>
+
+      {/* Button Container at the Bottom */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.circleButton} onPress={toggleCameraFacing}>
+          <Text style={styles.buttonText}>Flip</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.circleButton, isRecording && styles.recordingButton]}
+          onPress={isRecording ? stopRecording : startRecording}
+        >
+          <Text style={styles.buttonText}>
+            {isRecording ? 'Stop' : 'Record'}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -107,7 +129,6 @@ export default function VideoFeedbackScreen1() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     backgroundColor: '#fff',
   },
   message: {
@@ -117,24 +138,42 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
-  },
-  button: {
-    flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
+  timerContainer: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10,
     padding: 10,
   },
-  recordingButton: {
-    backgroundColor: 'rgba(255, 0, 0, 0.3)',
-    borderRadius: 8,
-  },
-  text: {
+  timerText: {
+    color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 30, // Ensure buttons are at the bottom of the screen
+    width: '100%',
+    paddingHorizontal: 20,
+  },
+  circleButton: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+  },
+  recordingButton: {
+    backgroundColor: 'rgba(255, 0, 0, 0.8)',
+  },
+  buttonText: {
     color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });

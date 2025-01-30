@@ -20,7 +20,7 @@ export default function VideoSubmitScreen() {
     setModalVisible(true);
     setTimeout(() => {
       setModalVisible(false);
-      navigation.navigate('Feedback', { submitted: true });
+      navigation.navigate('Home', { submitted: true });
     }, 2000);
   };
 
@@ -38,7 +38,7 @@ export default function VideoSubmitScreen() {
         }}
       />
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('VideoFeedbackScreen1')}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
         <Text style={styles.buttonText}>Record Another</Text>
       </TouchableOpacity>
 
